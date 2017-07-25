@@ -4,12 +4,30 @@ import Qt.labs.presentation 1.0
 Presentation {
     id: presentation
 
+    Image {
+        anchors.fill: parent
+        source: "background.png"
+    }
+
+    FontLoader {
+        id: titilium
+        source: "TitilliumWeb-Regular.ttf"
+    }
+
+    FontLoader {
+        id: titiliumLight
+        source: "TitilliumWeb-Light.ttf"
+    }
+
+    fontFamily: titilium.name
+    codeFontFamily: titiliumLight.name
+
     SlideCounter {}
     Clock {}
 
     Slide {
         centeredText: "<h1>Modern C++</h1><br>" +
-                      "by Jesús Fernández (<a href=\"mailto:jesus.fernandez@qt.io\">jesus.fernandez@qt.io</a>)"
+                      "por Jesús Fernández (<a href=\"mailto:jesus.fernandez@qt.io\">jesus.fernandez@qt.io</a>)"
     }
 
     Slide {
@@ -19,10 +37,9 @@ Presentation {
             "Panda Security",
             "Hewlett-Packard",
             "Gameloft",
-            " Asphalt 8",
-            " Despicable Me: Minion Rush",
-            " ...",
-            "The Qt Company"
+            "The Qt Company",
+            " Mantenedor de QtNetworkAuth",
+            " Mantenedor de QtWebGL Streaming Plugin"
         ]
     }
 
@@ -33,31 +50,36 @@ Presentation {
             "Inicializar variables",
             "default & delete",
             "Move constructor",
-            "Delegar constructores"
+            "Delegar constructores",
+            "Final y override"
         ]
 
         contentWidth: width / 2
 
         CodeSection {
-            text: "struct Example {
+            fontSize: 16
+            text: "struct Example final : Base {
     quint8 integer = 10;
     QObject *pointer = nullptr;
+    enum class Enumeration { First = 0, Second }
+    std::array<Enumeration, 2> array { Enumeration::First,
+        Enumeration::Second };
 
     Example() = default;
     Example(const Example &) = delete;
-    Example(Example &&other) = default;
+        Enumeration::Second };
 
     Example(quint8 integer, QObject *object) :
-        integer(integer), pointer(object)
-    {}
+        integer(integer), pointer(object) {}
 
     Example(QObject *object) :
-        Example(10, object)
-    {}
+        Example(10, object) {}
 
     Example(quint8 integer) :
-        Example(integer, nullptr)
-    {}
+        Example(integer, nullptr) {}
+
+    void baseVirtualFunction(F1) override;
+    void baseVirtualFunction(F2) final;
 } example;"
         }
     }
@@ -85,7 +107,7 @@ Presentation {
     }
 
     CodeSlide {
-        title: "Functiones lambda"
+        title: "Functiones lambda (2)"
         code: "constexpr int factorial(auto number)
 {
     std::function<decltype(factorial(number))()> function;
@@ -106,7 +128,7 @@ Presentation {
     unique_ptr.reset(new QObject);
     shared_ptr.reset(new QObject);
 
-    unique_ptr = std::make_unique<QObject>();
+    unique_ptr = std::make_unique<QObject>(); // C++14
     shared_ptr = std::make_shared<QObject>();
 }"
     }
